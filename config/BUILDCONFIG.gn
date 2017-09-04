@@ -88,7 +88,7 @@ if (current_os == "") {
 #   Nobody else in the build needs to see the flag.
 #
 # - Defines based on build variables should be implemented via the generated
-#   build flag header system. See //gn-build/gn-buildflag_header.gni. You can put
+#   build flag header system. See //gn-build/buildflag_header.gni. You can put
 #   the buildflag_header target in the same file as the build flag itself. You
 #   should almost never set "defines" directly.
 #
