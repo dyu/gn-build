@@ -1,5 +1,5 @@
 if (is_clang) {
-  import("//build/toolchain/clang.gni")
+  import("//gn-build/toolchain/clang.gni")
 }
 
 declare_args() {

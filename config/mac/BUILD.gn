@@ -2,10 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import("//build/config/sysroot.gni")
-import("//build/config/mac/mac_sdk.gni")
+import("//gn-build/config/sysroot.gni")
+import("//gn-build/config/mac/mac_sdk.gni")
 
-# This is included by reference in the //build/config/compiler config that
+# This is included by reference in the //gn-build/config/compiler config that
 # is applied to all targets. It is here to separate out the logic.
 #
 # This is applied to BOTH desktop Mac and iOS targets.
@@ -49,7 +49,7 @@ config("compiler") {
   ldflags = common_mac_flags
 }
 
-# This is included by reference in the //build/config/compiler:runtime_library
+# This is included by reference in the //gn-build/config/compiler:runtime_library
 # config that is applied to all targets. It is here to separate out the logic
 # that is Mac-only. Please see that target for advice on what should go in
 # :runtime_library vs. :compiler.

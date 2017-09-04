@@ -2,24 +2,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import("//build/config/compiler.gni")
-import("//build/config/sanitizers/sanitizers.gni")
-import("//build/toolchain/toolchain.gni")
-import("//build/toolchain/clang.gni")
+import("//gn-build/config/compiler.gni")
+import("//gn-build/config/sanitizers/sanitizers.gni")
+import("//gn-build/toolchain/toolchain.gni")
+import("//gn-build/toolchain/clang.gni")
 
 if (current_cpu == "arm" || current_cpu == "arm64") {
-  import("//build/config/arm.gni")
+  import("//gn-build/config/arm.gni")
 }
 
 if (current_cpu == "mipsel" || current_cpu == "mips64el") {
-  import("//build/config/mips.gni")
+  import("//gn-build/config/mips.gni")
 }
 
 if (is_android) {
-  import("//build/toolchain/android/settings.gni")
+  import("//gn-build/toolchain/android/settings.gni")
 }
 
-import("//build/toolchain/compiler_version.gni")
+import("//gn-build/toolchain/compiler_version.gni")
 
 declare_args() {
   # Default to warnings as errors for default workflow, where we catch
@@ -107,16 +107,16 @@ config("compiler") {
   # categories here, add it to the associated file to keep this shared config
   # smaller.
   if (is_win) {
-    configs += [ "//build/config/win:compiler" ]
+    configs += [ "//gn-build/config/win:compiler" ]
   } else if (is_android) {
-    configs += [ "//build/config/android:compiler" ]
+    configs += [ "//gn-build/config/android:compiler" ]
   } else if (is_mac) {
-    configs += [ "//build/config/mac:compiler" ]
+    configs += [ "//gn-build/config/mac:compiler" ]
   }
 
   # Applies to all Posix systems.
   if (is_posix) {
-    configs += [ "//build/config/posix:compiler" ]
+    configs += [ "//gn-build/config/posix:compiler" ]
   }
 
   # See the definitions below.
@@ -337,7 +337,7 @@ config("compiler") {
 
 # This is separate from :compiler (and not even a sub-config there)
 # so that some targets can remove it from the list with:
-#   configs -= [ "//build/config:pthread" ]
+#   configs -= [ "//gn-build/config:pthread" ]
 config("pthread") {
   if (is_linux) {
     cflags = [ "-pthread" ]
@@ -538,7 +538,7 @@ config("compiler_codegen") {
 
 # This is separate from :compiler_codegen (and not even a sub-config there)
 # so that some targets can remove it from the list with:
-#   configs -= [ "//build/config/compiler:stackrealign" ]
+#   configs -= [ "//gn-build/config/compiler:stackrealign" ]
 config("stackrealign") {
   if (current_cpu == "x86") {
     if (is_clang && (is_freebsd || is_linux)) {
@@ -632,15 +632,15 @@ config("runtime_library") {
   # categories here, add it to the associated file to keep this shared config
   # smaller.
   if (is_win) {
-    configs += [ "//build/config/win:runtime_library" ]
+    configs += [ "//gn-build/config/win:runtime_library" ]
   } else if (is_mac) {
-    configs += [ "//build/config/mac:runtime_library" ]
+    configs += [ "//gn-build/config/mac:runtime_library" ]
   } else if (is_android) {
-    configs += [ "//build/config/android:runtime_library" ]
+    configs += [ "//gn-build/config/android:runtime_library" ]
   }
 
   if (is_posix) {
-    configs += [ "//build/config/posix:runtime_library" ]
+    configs += [ "//gn-build/config/posix:runtime_library" ]
   }
 }
 
@@ -746,8 +746,8 @@ config("no_incompatible_pointer_warnings") {
 # You can override the optimization level on a per-target basis by removing the
 # default config and then adding the named one you want:
 #
-#   configs -= [ "//build/config/compiler:default_optimization" ]
-#   configs += [ "//build/config/compiler:optimize_max" ]
+#   configs -= [ "//gn-build/config/compiler:default_optimization" ]
+#   configs += [ "//gn-build/config/compiler:optimize_max" ]
 
 # Shared settings for both "optimize" and "optimize_max" configs.
 # IMPORTANT: On Windows "/O1" and "/O2" must go before the common flags.
@@ -987,8 +987,8 @@ config("afdo") {
 # You can override the symbol level on a per-target basis by removing the
 # default config and then adding the named one you want:
 #
-#   configs -= [ "//build/config:default_symbols" ]
-#   configs += [ "//build/config:symbols" ]
+#   configs -= [ "//gn-build/config:default_symbols" ]
+#   configs += [ "//gn-build/config:symbols" ]
 
 # Full symbols.
 config("symbols") {

@@ -61,11 +61,11 @@ script:
   - python gn_helpers_unittest.py
   - travis_retry wget --no-check-certificate --quiet -O gn https://storage.googleapis.com/chromium-gn/$GN_LNX64_SHA1
   - chmod +x gn
-  - git clone --branch=testsrc https://github.com/timniederhausen/gn-build.git testsrc
-  - mkdir testsrc/build
-  - mv config testsrc/build/
-  - mv toolchain testsrc/build/
-  - chmod +x gn && ./gn gen out --args="$GN_ARGS" --root=testsrc
-  - cat out/args.gn
-  - ninja -C out
-  - out/hello
+  - git clone --branch=testsrc https://github.com/dyu/gn-build.git testsrc
+  - mkdir testsrc/gn-build
+  - mv config testsrc/gn-build/
+  - mv toolchain testsrc/gn-build/
+  - chmod +x gn && ./gn gen gn-out --args="$GN_ARGS" --root=testsrc
+  - cat gn-out/args.gn
+  - ninja -C gn-out
+  - gn-out/hello

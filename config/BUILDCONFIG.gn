@@ -88,7 +88,7 @@ if (current_os == "") {
 #   Nobody else in the build needs to see the flag.
 #
 # - Defines based on build variables should be implemented via the generated
-#   build flag header system. See //build/buildflag_header.gni. You can put
+#   build flag header system. See //gn-build/gn-buildflag_header.gni. You can put
 #   the buildflag_header target in the same file as the build flag itself. You
 #   should almost never set "defines" directly.
 #
@@ -103,7 +103,7 @@ if (current_os == "") {
 #   the above pattern for isolating the build logic in a forwarding group
 #   doesn't work, you can put the argument in a .gni file. This should be put
 #   in the lowest level of the build that knows about this feature (which should
-#   almost always be outside of the //build directory!).
+#   almost always be outside of the //gn-build directory!).
 #
 # Other flag advice:
 #
@@ -176,14 +176,14 @@ if (host_toolchain == "") {
   # no toolchain omitted host_toolchain from its toolchain_args().
 
   if (host_os == "mac") {
-    host_toolchain = "//build/toolchain/mac:clang_$host_cpu"
+    host_toolchain = "//gn-build/toolchain/mac:clang_$host_cpu"
   } else if (host_os == "win") {
     # On Windows always use the target CPU for host builds. On the
     # configurations we support this will always work and it saves build steps.
     if (is_clang) {
-      host_toolchain = "//build/toolchain/win:clang_$host_cpu"
+      host_toolchain = "//gn-build/toolchain/win:clang_$host_cpu"
     } else {
-      host_toolchain = "//build/toolchain/win:$host_cpu"
+      host_toolchain = "//gn-build/toolchain/win:$host_cpu"
     }
   } else {
     if (target_os != host_os) {
@@ -191,11 +191,11 @@ if (host_toolchain == "") {
       # build, and there is no way to indicate that you want to override
       # it for both the target build *and* the host build. Do we need to
       # support this?
-      host_toolchain = "//build/toolchain/posix:clang_$host_cpu"
+      host_toolchain = "//gn-build/toolchain/posix:clang_$host_cpu"
     } else if (is_clang) {
-      host_toolchain = "//build/toolchain/posix:clang_$host_cpu"
+      host_toolchain = "//gn-build/toolchain/posix:clang_$host_cpu"
     } else {
-      host_toolchain = "//build/toolchain/posix:$host_cpu"
+      host_toolchain = "//gn-build/toolchain/posix:$host_cpu"
     }
   }
 }
@@ -204,9 +204,9 @@ _default_toolchain = ""
 
 if (target_os == "android") {
   if (is_clang) {
-    _default_toolchain = "//build/toolchain/android:android_clang_$target_cpu"
+    _default_toolchain = "//gn-build/toolchain/android:android_clang_$target_cpu"
   } else {
-    _default_toolchain = "//build/toolchain/android:android_$target_cpu"
+    _default_toolchain = "//gn-build/toolchain/android:android_$target_cpu"
   }
 } else if (target_os == "mac") {
   assert(host_os == "mac", "Mac cross-compiles are unsupported.")
@@ -215,18 +215,18 @@ if (target_os == "android") {
   # On Windows we use the same toolchain for host and target by default.
   assert(target_os == host_os, "Win cross-compiles only work on win hosts.")
   if (is_clang) {
-    _default_toolchain = "//build/toolchain/win:clang_$target_cpu"
+    _default_toolchain = "//gn-build/toolchain/win:clang_$target_cpu"
   } else {
-    _default_toolchain = "//build/toolchain/win:$target_cpu"
+    _default_toolchain = "//gn-build/toolchain/win:$target_cpu"
   }
 } else if (target_os == "winrt_81" || target_os == "winrt_81_phone" ||
            target_os == "winrt_10") {
-  _default_toolchain = "//build/toolchain/win:winrt_$target_cpu"
+  _default_toolchain = "//gn-build/toolchain/win:winrt_$target_cpu"
 } else {
   if (is_clang) {
-    _default_toolchain = "//build/toolchain/posix:clang_$target_cpu"
+    _default_toolchain = "//gn-build/toolchain/posix:clang_$target_cpu"
   } else {
-    _default_toolchain = "//build/toolchain/posix:$target_cpu"
+    _default_toolchain = "//gn-build/toolchain/posix:$target_cpu"
   }
 }
 
@@ -301,46 +301,46 @@ if (current_os == "win" || current_os == "winrt_81" ||
 
 # Holds all configs used for running the compiler.
 default_compiler_configs = [
-  "//build/config:afdo",
-  "//build/config:compiler",
-  "//build/config:pthread",
-  "//build/config:stackrealign",
-  "//build/config:compiler_arm_fpu",
-  "//build/config:compiler_arm_thumb",
-  "//build/config:default_optimization",
-  "//build/config:default_stack_frames",
-  "//build/config:default_symbols",
-  "//build/config:c++14",
-  "//build/config:rtti",
-  "//build/config:exceptions",
-  "//build/config:runtime_library",
-  "//build/config:symbol_visibility_hidden",
-  "//build/config/sanitizers:default_sanitizer_flags",
+  "//gn-build/config:afdo",
+  "//gn-build/config:compiler",
+  "//gn-build/config:pthread",
+  "//gn-build/config:stackrealign",
+  "//gn-build/config:compiler_arm_fpu",
+  "//gn-build/config:compiler_arm_thumb",
+  "//gn-build/config:default_optimization",
+  "//gn-build/config:default_stack_frames",
+  "//gn-build/config:default_symbols",
+  "//gn-build/config:c++14",
+  "//gn-build/config:rtti",
+  "//gn-build/config:exceptions",
+  "//gn-build/config:runtime_library",
+  "//gn-build/config:symbol_visibility_hidden",
+  "//gn-build/config/sanitizers:default_sanitizer_flags",
 ]
 if (is_win) {
   default_compiler_configs += [
-    "//build/config/win:default_crt",
-    "//build/config/win:lean_and_mean",
-    "//build/config/win:nominmax",
-    "//build/config/win:winver",
-    "//build/config/win:vs_code_analysis",
+    "//gn-build/config/win:default_crt",
+    "//gn-build/config/win:lean_and_mean",
+    "//gn-build/config/win:nominmax",
+    "//gn-build/config/win:winver",
+    "//gn-build/config/win:vs_code_analysis",
   ]
 }
 if (current_os == "winrt_81" || current_os == "winrt_81_phone" ||
     current_os == "winrt_10") {
-  default_compiler_configs += [ "//build/config/win:target_winrt" ]
+  default_compiler_configs += [ "//gn-build/config/win:target_winrt" ]
 }
 
 if (is_android) {
   default_compiler_configs +=
-      [ "//build/config/android:default_cygprofile_instrumentation" ]
+      [ "//gn-build/config/android:default_cygprofile_instrumentation" ]
 }
 
 # Debug/release-related defines.
 if (is_debug) {
-  default_compiler_configs += [ "//build/config:debug" ]
+  default_compiler_configs += [ "//gn-build/config:debug" ]
 } else {
-  default_compiler_configs += [ "//build/config:release" ]
+  default_compiler_configs += [ "//gn-build/config:release" ]
 }
 
 # Static libraries and source sets use only the compiler ones.
@@ -356,34 +356,34 @@ set_defaults("source_set") {
 if (is_win) {
   # Windows linker setup for EXEs and DLLs.
   # Many targets remove these configs, so they are not contained within
-  # //build/config:executable_config for easy removal.
+  # //gn-build/config:executable_config for easy removal.
   _linker_configs = [
-    "//build/config/win:sdk_link",
-    "//build/config/win:common_linker_setup",
-    "//build/config/win:default_incremental_linking",
+    "//gn-build/config/win:sdk_link",
+    "//gn-build/config/win:common_linker_setup",
+    "//gn-build/config/win:default_incremental_linking",
 
     # Default to console-mode apps. Most of our targets are tests and such
     # that shouldn't use the windows subsystem.
-    "//build/config/win:console",
+    "//gn-build/config/win:console",
   ]
 } else if (is_mac) {
-  _linker_configs = [ "//build/config/mac:strip_all" ]
+  _linker_configs = [ "//gn-build/config/mac:strip_all" ]
 } else {
   _linker_configs = []
 }
 
 # Executable defaults.
 default_executable_configs = default_compiler_configs
-default_executable_configs += [ "//build/config:default_libs" ]
+default_executable_configs += [ "//gn-build/config:default_libs" ]
 default_executable_configs += _linker_configs
 
 if (is_mac) {
   default_executable_configs += [
-    "//build/config/mac:mac_dynamic_flags",
-    "//build/config/mac:mac_executable_flags",
+    "//gn-build/config/mac:mac_dynamic_flags",
+    "//gn-build/config/mac:mac_executable_flags",
   ]
 } else if (!is_win) {
-  default_executable_configs += [ "//build/config/posix:executable_ldconfig" ]
+  default_executable_configs += [ "//gn-build/config/posix:executable_ldconfig" ]
 }
 
 set_defaults("executable") {
@@ -393,11 +393,11 @@ set_defaults("executable") {
 # Shared library and loadable module defaults (also for components in component
 # mode).
 default_shared_library_configs = default_compiler_configs
-default_shared_library_configs += [ "//build/config:default_libs" ]
+default_shared_library_configs += [ "//gn-build/config:default_libs" ]
 default_shared_library_configs += _linker_configs
 
 if (is_mac) {
-  configs += [ "//build/config/mac:mac_dynamic_flags" ]
+  configs += [ "//gn-build/config/mac:mac_dynamic_flags" ]
 }
 
 set_defaults("shared_library") {
