@@ -310,7 +310,7 @@ default_compiler_configs = [
   "//gn-build/config:default_optimization",
   "//gn-build/config:default_stack_frames",
   "//gn-build/config:default_symbols",
-  "//gn-build/config:c++14",
+  "//gn-build/config:c++11",
   "//gn-build/config:rtti",
   "//gn-build/config:exceptions",
   "//gn-build/config:runtime_library",
