@@ -649,6 +649,7 @@ config("runtime_library") {
 config("c++11") {
   if (!is_win) {
     cflags_cc = [ "-std=c++11" ]
+    cflags_c = [ "-std=c11" ]
   }
 }
 
