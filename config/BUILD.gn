@@ -1341,14 +1341,15 @@ config("default_libs") {
     ]
   } else if (is_mac) {
     libs = [
-      "AppKit.framework",
-      "ApplicationServices.framework",
-      "Carbon.framework",
-      "CoreFoundation.framework",
-      "Foundation.framework",
-      "IOKit.framework",
-      "OpenGL.framework",
-      "Security.framework",
+#TODO error: Unsupported value in libs. (Use frameworks to list framework dependencies.)
+#      "AppKit.framework",
+#      "ApplicationServices.framework",
+#      "Carbon.framework",
+#      "CoreFoundation.framework",
+#      "Foundation.framework",
+#      "IOKit.framework",
+#      "OpenGL.framework",
+#      "Security.framework",
     ]
   } else if (is_linux) {
     libs = [
