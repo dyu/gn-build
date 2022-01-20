@@ -53,8 +53,8 @@ template("android_gcc_toolchain") {
 
     if (toolchain_uses_clang) {
       _prefix = rebase_path("$clang_base_path/bin", root_build_dir)
-      cc = "$_prefix/clang"
-      cxx = "$_prefix/clang++"
+      cc = "$_prefix/$clang_cc_name"
+      cxx = "$_prefix/$clang_cxx_name"
     } else {
       cc = "${_tool_prefix}gcc"
       cxx = "${_tool_prefix}g++"

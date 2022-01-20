@@ -8,7 +8,13 @@ import os
 
 def _get_compiler_version(path, major_define, minor_define, patchlevel_define):
   path = os.path.normpath(path)
-  defines = subprocess.check_output('echo "" | "{}" -dM -E -'.format(path), shell=True,
+  suffix = ' -dM -E -'
+  space_idx = path.find(' ')
+  if space_idx != -1:
+    suffix = path[space_idx:] + suffix
+    path = path[:space_idx]
+
+  defines = subprocess.check_output('echo "" | "{}"{}'.format(path, suffix), shell=True,
                                     universal_newlines=True).split('\n')
   version = 0
   for define in defines:

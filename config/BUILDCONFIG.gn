@@ -146,12 +146,26 @@ declare_args() {
   # can depend on each other (e.g. $external/mysql_connector -> $external/zlib)
   external = "//external"
 
+  # Set to true when compiling with the clang compiler via zig (clang 13+)
+  is_zig_clang = false
+  clang_cc_name = "clang"
+  clang_cxx_name = "clang++"
   # DON'T ADD MORE FLAGS HERE. Read the comment above.
 }
 
 declare_args() {
   # Debug build. Enabling official builds automatically sets is_debug to false.
   is_debug = !is_official_build
+}
+
+if (is_zig_clang) {
+  is_clang = true
+  if (clang_cc_name == "") {
+    clang_cc_name = "zig cc"
+  }
+  if (clang_cxx_name == "") {
+    clang_cxx_name = "zig c++"
+  }
 }
 
 assert(!(is_debug && is_official_build), "Can't do official debug builds")

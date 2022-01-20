@@ -29,16 +29,16 @@ declare_args() {
 
 if (is_clang && clang_cc == 0) {
   if (clang_base_path != "") {
-    clang_cc = "$clang_base_path/clang"
+    clang_cc = "$clang_base_path/$clang_cc_name"
   } else {
-    clang_cc = "clang"
+    clang_cc = "$clang_cc_name"
   }
 }
 
 if (is_clang && clang_cxx == 0) {
   if (clang_base_path != "") {
-    clang_cxx = "$clang_base_path/clang++"
+    clang_cxx = "$clang_base_path/$clang_cxx_name"
   } else {
-    clang_cxx = "clang++"
+    clang_cxx = "$clang_cxx_name"
   }
 }

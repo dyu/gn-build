@@ -423,10 +423,12 @@ config("compiler_cpu_abi") {
     # CPU architecture. We may or may not be doing a cross compile now, so for
     # simplicity we always explicitly set the architecture.
     if (current_cpu == "x64") {
-      cflags += [
-        "-m64",
-        "-march=x86-64",
-      ]
+      cflags += [ "-m64" ]
+      if (is_zig_clang) {
+        cflags += [ "-march=x86_64" ]
+      } else {
+        cflags += [ "-march=x86-64" ]
+      }
       ldflags += [ "-m64" ]
     } else if (current_cpu == "x86") {
       cflags += [ "-m32" ]

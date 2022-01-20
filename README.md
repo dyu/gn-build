@@ -30,6 +30,7 @@ All variables described here are build args and can be overridden in the user's
 
 * `is_debug` (default: true): Toggle between debug and release builds.
 * `is_clang` (default: false): Favor Clang over the platform default (GCC/MSVC).
+* `is_zig_clang` (default: false): Use the zig compiler that wraps clang 13+.
 * `is_official_build` (default: !is_debug): Set to enable the official build
   level of optimization. This enables an additional level of optimization above
   release (!is_debug).
@@ -183,3 +184,8 @@ For more complex projects, it might be feasible to use a custom build-config fil
 that just `import()s` [`//build/config/BUILDCONFIG.gn`](config/BUILDCONFIG.gn) and then overrides
 the defaults set inside `BUILDCONFIG.gn`. There's also GN's `default_args` scope, which can be used
 to provide project-specific argument overrides.
+
+## Sample zig build
+```sh
+gn gen gn-out --args='clang_cc="zig cc" clang_cxx="zig c++" symbol_level=0 is_debug=false is_zig_clang=true is_official_build=true'
+```

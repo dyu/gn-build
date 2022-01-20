@@ -102,8 +102,8 @@ template("mac_toolchain") {
       compiler_prefix += rebase_path("$clang_base_path/bin/", root_build_dir)
     }
 
-    cc = "${compiler_prefix}clang"
-    cxx = "${compiler_prefix}clang++"
+    cc = "${compiler_prefix}$clang_cc_name"
+    cxx = "${compiler_prefix}$clang_cxx_name"
     ld = cxx
 
     linker_driver =
