@@ -52,7 +52,7 @@ def Main(args):
   if len(args) < 2:
     raise RuntimeError("Usage: linker_driver.py [linker-invocation]")
 
-  for i in xrange(len(args)):
+  for i in range(len(args)):
     if args[i] != '--developer_dir':
       continue
     os.environ['DEVELOPER_DIR'] = args[i + 1]
@@ -86,7 +86,7 @@ def Main(args):
   except:
     # If a linker driver action failed, remove all the outputs to make the
     # build step atomic.
-    map(_RemovePath, linker_driver_outputs)
+    list(map(_RemovePath, linker_driver_outputs))
 
     # Re-report the original failure.
     raise
@@ -228,3 +228,4 @@ _LINKER_DRIVER_ACTIONS = [
 if __name__ == '__main__':
   Main(sys.argv)
   sys.exit(0)
+

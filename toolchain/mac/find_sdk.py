@@ -21,7 +21,7 @@ from optparse import OptionParser
 
 def parse_version(version_str):
   """'10.6' => [10, 6]"""
-  return map(int, re.findall(r'(\d+)', version_str))
+  return list(map(int, re.findall(r'(\d+)', version_str)))
 
 
 def main():
@@ -44,14 +44,15 @@ def main():
   if options.developer_dir:
     os.environ['DEVELOPER_DIR'] = options.developer_dir
 
-  job = subprocess.Popen(['xcode-select', '-print-path'],
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT)
-  out, err = job.communicate()
-  if job.returncode != 0:
-    print >> sys.stderr, out
-    print >> sys.stderr, err
-    raise Exception('Error %d running xcode-select' % job.returncode)
+  # job = subprocess.Popen(['xcode-select', '-print-path'],
+  #                        stdout=subprocess.PIPE,
+  #                        stderr=subprocess.STDOUT)
+  # out, err = job.communicate()
+  # if job.returncode != 0:
+  #   print(out, file=sys.stderr)
+  #   print(err, file=sys.stderr)
+  #   raise Exception('Error %d running xcode-select' % job.returncode)
+  out = subprocess.check_output(['xcode-select', '-print-path']).decode()
   sdk_dir = os.path.join(
       out.rstrip(), 'Platforms/MacOSX.platform/Developer/SDKs')
   sdks = [re.findall('^MacOSX(1\d\.\d+)\.sdk$', s) for s in os.listdir(sdk_dir)]
@@ -63,22 +64,20 @@ def main():
   best_sdk = sorted(sdks, key=parse_version)[0]
 
   if options.verify and best_sdk != min_sdk_version and not options.sdk_path:
-    print >> sys.stderr, ''
-    print >> sys.stderr, '                                           vvvvvvv'
-    print >> sys.stderr, ''
-    print >> sys.stderr, \
-        'This build requires the %s SDK, but it was not found on your system.' \
-        % min_sdk_version
-    print >> sys.stderr, \
-        'Either install it, or explicitly set mac_sdk in your GYP_DEFINES.'
-    print >> sys.stderr, ''
-    print >> sys.stderr, '                                           ^^^^^^^'
-    print >> sys.stderr, ''
+    print('', file=sys.stderr)
+    print('                                           vvvvvvv', file=sys.stderr)
+    print('', file=sys.stderr)
+    print('This build requires the %s SDK, but it was not found on your system.' \
+        % min_sdk_version, file=sys.stderr)
+    print('Either install it, or explicitly set mac_sdk in your GYP_DEFINES.', file=sys.stderr)
+    print('', file=sys.stderr)
+    print('                                           ^^^^^^^', file=sys.stderr)
+    print('', file=sys.stderr)
     sys.exit(1)
 
   if options.print_sdk_path:
-    print subprocess.check_output(
-        ['xcrun', '-sdk', 'macosx' + best_sdk, '--show-sdk-path']).strip()
+    print(subprocess.check_output(
+        ['xcrun', '-sdk', 'macosx' + best_sdk, '--show-sdk-path']).decode().strip())
 
   return best_sdk
 
@@ -86,5 +85,6 @@ def main():
 if __name__ == '__main__':
   if sys.platform != 'darwin':
     raise Exception("This script only runs on Mac")
-  print main()
+  print(main())
   sys.exit(0)
+
