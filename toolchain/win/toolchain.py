@@ -294,7 +294,13 @@ def GetVsPath(version_as_year):
   """Gets location information about the current toolchain. This is used for the GN build."""
   print(DetectVisualStudioPath(version_as_year))
 
-
+def _tryOverwriteSdkPath(env):
+  win_sdk_path = os.path.realpath(env['WINDOWSSDKDIR'])
+  win_sdk_parent = os.path.dirname(win_sdk_path)
+  win_sdk81_path = os.path.join(win_sdk_parent, '8.1')
+  if win_sdk_path != win_sdk81_path and os.path.exists(win_sdk81_path):
+    env['WINDOWSSDKDIR'] = win_sdk81_path
+  
 def SetupToolchain(version_as_year, vs_path, sdk_version=None,
                    clang_base_path=None, clang_msc_ver=None):
   cpus = ('x86', 'x64', 'arm', 'arm64')
@@ -313,7 +319,9 @@ def SetupToolchain(version_as_year, vs_path, sdk_version=None,
     del os.environ['LIB']
     del os.environ['LIBPATH']
 
-  if version_as_year == 'latest':
+  explicit_version = version_as_year != 'latest'
+
+  if not explicit_version:
     version_as_year, vs_path = FindLatestVisualStudio()
   elif not vs_path or vs_path == 'default':
     vs_path = DetectVisualStudioPath(version_as_year)
@@ -336,7 +344,11 @@ def SetupToolchain(version_as_year, vs_path, sdk_version=None,
     if env is None:
       # Extract environment variables for subprocesses.
       env = _ExtractImportantEnvironment(_ProcessSpawnResult(processes[name]))
+      if explicit_version and 2019 >= int(version_as_year):
+        _tryOverwriteSdkPath(env)
       SaveEnv(env_filename, env)
+    elif explicit_version and 2019 >= int(version_as_year):
+      _tryOverwriteSdkPath(env)
     envs[name] = env
 
     vc_bin_dir = ''

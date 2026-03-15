@@ -365,9 +365,9 @@ template("msvc_toolchain") {
       pool = "//build/toolchain:action_pool($default_toolchain)"
     }
 
-    tool("action") {
-      pool = "//build/toolchain:action_pool($default_toolchain)"
-    }
+    #tool("action") {
+    #  pool = "//build/toolchain:action_pool($default_toolchain)"
+    #}
   }
 }
 
@@ -390,10 +390,10 @@ template("target_combo_toolchains") {
 
   msvc_toolchain("clang_" + cpu) {
     environment = tgt_toolchain_data.env_filename
-    cl = "$clang_base_path/bin/${clang_cl}"
     if (host_os == "win") {
-      # Flip the slashes so that copy/paste of the command works.
-      cl = string_replace(cl, "/", "\\")
+      cl = "$clang_base_path\\bin\\${clang_cl}"
+    } else {
+      cl = "$clang_base_path/bin/${clang_cl}"
     }
     sys_include_flags = "${tgt_toolchain_data.include_flags_imsvc}"
     sys_lib_flags = "${tgt_toolchain_data.libpath_flags}"
